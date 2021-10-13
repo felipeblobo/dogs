@@ -8,12 +8,13 @@ export const GlobalStyle = createGlobalStyle`
     --type-second: 'Spectral', serif;
   }
 
-  * {
+  body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: var(---type-first);
     color: var(---black);
+    padding-top: 4rem;
   }
 
   ul, li {
@@ -23,6 +24,10 @@ export const GlobalStyle = createGlobalStyle`
   img {
     display: block;
     max-width: 100%;
+  }
+
+  a {
+    text-decoration: none;
   }
   
   button, input {
