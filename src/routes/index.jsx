@@ -1,19 +1,21 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 
-const Routes = () => {
+const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Header />
-      <Route component={Home} path="/" exact />
-      <Route component={Login} path="/login" />
+      <Routes>
+        <Route element={<Home />} path="/" exact />
+        <Route element={<Login />} path="/login/*" />
+      </Routes>
       <Footer />
     </BrowserRouter>
   );
 };
 
-export default Routes;
+export default AppRoutes;
