@@ -4,8 +4,13 @@ import styled from 'styled-components';
 export const GlobalStyle = createGlobalStyle`
   :root {
     --black: #333;
+    --anotherGold: #764701;
+    --smoothBackground: #eee;
+    --golden: #ffbb11;
     --type-first: 'Inter', sans-serif;
     --type-second: 'Spectral', serif;
+
+    
   }
 
   body {
