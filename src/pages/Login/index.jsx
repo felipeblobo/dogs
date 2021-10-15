@@ -5,20 +5,24 @@ import LoginCreate from './LoginCreate';
 import LoginPasswordLost from './LoginPasswordLost';
 import LoginPasswordReset from './LoginPasswordReset';
 import { UserContext } from '../../context/UserContext';
+import { Forms, MainLoginSection } from './styles';
 
 const Login = () => {
-
   const { login } = useContext(UserContext);
 
-  if (login) return <Navigate to='/conta' />
+  if (login) return <Navigate to="/conta" />;
 
   return (
-    <Routes>
-      <Route path="/" element={<LoginForm />} />
-      <Route path="criar" element={<LoginCreate />} />
-      <Route path="perdeu" element={<LoginPasswordLost />} />
-      <Route path="resetar" element={<LoginPasswordReset />} />
-    </Routes>
+    <MainLoginSection>
+      <Forms>
+        <Routes>
+          <Route path="/" element={<LoginForm />} />
+          <Route path="criar" element={<LoginCreate />} />
+          <Route path="perdeu" element={<LoginPasswordLost />} />
+          <Route path="resetar" element={<LoginPasswordReset />} />
+        </Routes>
+      </Forms>
+    </MainLoginSection>
   );
 };
 
