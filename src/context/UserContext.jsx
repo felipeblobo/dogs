@@ -11,39 +11,42 @@ export const UserProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const userLogout = useCallback(
-    async () => {
+  const userLogout = useCallback(async () => {
     setData(null);
     setError(null);
     setLoading(false);
     setLogin(false);
     window.localStorage.removeItem('dogToken');
     navigate('/login');
-  },[navigate])
+  }, [navigate]);
 
-
-  // useEffect(() => {
-  //   async function autoLogin() {
-  //     try {
-  //       setError(null);
-  //       setLoading(true);
-  //       const response = await api({
-  //         method: 'POST',
-  //         url: '/jwt-auth/v1/token/validate',
-  //       });
-  //       if (!response.status === 200) {
-  //         throw new Error('Token inválido!');
-  //       }
-  //       await getUser();
-  //       setLogin(true);
-  //     } catch (error) {
-  //       userLogout();
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-  //   autoLogin();
-  // }, [userLogout]);
+  useEffect(() => {
+    async function autoLogin() {
+      const token = window.localStorage.getItem('dogToken');
+      if (token) {
+        try {
+          setError(null);
+          setLoading(true);
+          const response = await api({
+            method: 'POST',
+            url: '/jwt-auth/v1/token/validate',
+          });
+          if (!response.status === 200) {
+            throw new Error('Token inválido!');
+          }
+          await getUser();
+          setLogin(true);
+        } catch (error) {
+          userLogout();
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLogin(false);
+      }
+    }
+    autoLogin();
+  }, [userLogout]);
 
   async function getUser() {
     try {
@@ -87,7 +90,7 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ userLogin, data, loading, setLoading, error, userLogout }}
+      value={{ userLogin, data, login, loading, setLoading, error, userLogout }}
     >
       {children}
     </UserContext.Provider>
