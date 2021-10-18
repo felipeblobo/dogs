@@ -11,7 +11,8 @@ export const UserProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const userLogout = useCallback(() => {
+  const userLogout = useCallback(
+    async () => {
     setData(null);
     setError(null);
     setLoading(false);
@@ -21,28 +22,28 @@ export const UserProvider = ({ children }) => {
   },[navigate])
 
 
-  useEffect(() => {
-    async function autoLogin() {
-      try {
-        setError(null);
-        setLoading(true);
-        const response = await api({
-          method: 'POST',
-          url: '/jwt-auth/v1/token/validate',
-        });
-        if (!response.status === 200) {
-          throw new Error('Token inválido!');
-        }
-        await getUser();
-        setLogin(true);
-      } catch (error) {
-        userLogout();
-      } finally {
-        setLoading(false);
-      }
-    }
-    autoLogin();
-  }, [userLogout]);
+  // useEffect(() => {
+  //   async function autoLogin() {
+  //     try {
+  //       setError(null);
+  //       setLoading(true);
+  //       const response = await api({
+  //         method: 'POST',
+  //         url: '/jwt-auth/v1/token/validate',
+  //       });
+  //       if (!response.status === 200) {
+  //         throw new Error('Token inválido!');
+  //       }
+  //       await getUser();
+  //       setLogin(true);
+  //     } catch (error) {
+  //       userLogout();
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  //   autoLogin();
+  // }, [userLogout]);
 
   async function getUser() {
     try {

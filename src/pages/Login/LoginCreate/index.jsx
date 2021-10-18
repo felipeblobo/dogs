@@ -1,38 +1,65 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../../../context/UserContext';
+import useForm from '../../../hooks/useForm';
+import Button from '../components/Button';
+import InputBlock from '../components/Input';
+import { CreateFormSection, CreateFormTitle } from './styles';
+import useFetch from '../../../hooks/useFetch';
+import { Error } from '../components/Input/styles';
 
 const LoginCreate = () => {
-  const [user, setUser] = useState({
-    username: '',
-    password: '',
-  });
+  const username = useForm();
+  const email = useForm('email');
+  const password = useForm();
+  const { userLogin } = useContext(UserContext);
+  const { loading, error, request } = useFetch();
 
-  function handleChange(e) {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  }
+  const options = {
+    method: 'POST',
+    url: '/api/user',
+    data: {
+      username: username.value,
+      email: email.value,
+      password: password.value,
+    },
+  };
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log(user);
+    const { response } = await request(options);
+    if (response.status === 200) {
+      await userLogin(username, password);
+    }
   }
 
   return (
     <section>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          value={user.username}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          value={user.password}
-          onChane={handleChange}
-        />
-        <button>Entrar</button>
-      </form>
+      <h1>
+        <CreateFormSection>
+          <CreateFormTitle>Cadastre-se</CreateFormTitle>
+          <form onSubmit={handleSubmit}>
+            <InputBlock
+              label="Usuário"
+              type="text"
+              name="username"
+              {...username}
+            />
+            <InputBlock label="Email" type="email" name="email" {...email} />
+            <InputBlock
+              label="Senha"
+              type="password"
+              name="password"
+              {...password}
+            />
+            {loading ? (
+              <Button disabled>Cadastrando...</Button>
+            ) : (
+              <Button>Cadastrar</Button>
+            )}
+          </form>
+          {error && <Error>{error}</Error>}
+        </CreateFormSection>
+      </h1>
     </section>
   );
 };

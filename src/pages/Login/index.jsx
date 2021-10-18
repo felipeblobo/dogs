@@ -8,6 +8,7 @@ import { UserContext } from '../../context/UserContext';
 import { Forms, MainLoginSection } from './styles';
 
 const Login = () => {
+  
   const { login } = useContext(UserContext);
 
   if (login) return <Navigate to="/conta" />;
